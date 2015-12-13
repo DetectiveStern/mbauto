@@ -1,5 +1,5 @@
 #!/bin/bash
 
-$(cd $HOME/Plex/user/lib/plexmediaserver/ ; screen bash start.sh) 
+$(cd $HOME/Plex/usr/lib/plexmediaserver/ ; screen bash start.sh) 
 
 
