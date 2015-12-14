@@ -1,10 +1,15 @@
 #!/bin/bash
+arch=`getconf LONG_BIT`
+echo "Getting $arch-bit deb..."
 site=`wget -qO- https://plex.tv/downloads`
-if [[ `getconf LONG_BIT` == "64" ]]; then
-	echo "Getting 64-bit deb..."
-	file=$( echo "$site" | grep 'data-event-label="Ubuntu64"' | grep -Eoi '<a [^>]+>' | grep -Eo 'href="[^\"]+"' | cut -d "\"" -f 2 )
-else 
-	echo "Getting 32-bit deb..."
-	file=$( echo "$site" | grep 'data-event-label="Ubuntu32"' | grep -Eoi '<a [^>]+>' | grep -Eo 'href="[^\"]+"' | cut -d "\"" -f 2 )
+deb=$( echo "$site" | grep 'data-event-label="Ubuntu'$arch'"' | grep -Eoi '<a [^>]+>' | grep -Eo 'href="[^\"]+"' | cut -d "\"" -f 2 )
+filename=$( echo "$deb" | cut -d "/" -f6 )
+wget "$deb" -q 
+if [[ ! -a "$filename" ]]; then
+	echo "Download Failed"
+else
+	echo "Saved $filename"
+	echo "$filename" >> packageinfo.log
 fi
-wget "$file"
+
+
